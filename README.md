@@ -1,116 +1,289 @@
-# Backend Developer Coding Test
+# Product Inventory API
 
-Welcome to the coding test for the **Backend Developer role**. This test evaluates your skills in Node.js, Express.js, Express Validator, JWT Authentication, Authorization Middleware, database management, and API design.
+A simple RESTful API built with Node.js and Express.js for managing products in an inventory system.
 
-## Test Instructions
+This project includes:
 
-1. **Clone the Repository**: Fork this repository and complete the coding challenges below.
-2. **Complete the Challenges**: Implement the tasks as specified.
-3. **Submit the Solution**: Once you have completed the tasks, push your code to your repository and share the link.
-
-
----
-
-# ⏳ Time Limit
-
-You have **2 days** to complete this test.
-
-### Submission Steps
-
-1. Fork this repository
-2. Complete the implementation
-3. Push your solution to your fork
-4. Email your GitHub repository link to:
-
-careers@fekracorp.com
+- JWT Authentication
+- Admin Authorization Middleware
+- Product CRUD Operations
+- Express Validator Validation
+- MongoDB Atlas Integration
+- Pagination Support
 
 ---
 
-## Challenge 1: Build a RESTful API with Node.js, Express, Express Validator, and JWT Authentication
+# Technologies Used
 
-### Objective
-Create a RESTful API using Node.js and Express.js to manage a Product Inventory System with JWT authentication and authorization middleware.
+- Node.js
+- Express.js
+- MongoDB Atlas
+- Mongoose
+- JWT (jsonwebtoken)
+- bcryptjs
+- express-validator
+- dotenv
 
-### Requirements
+---
 
-#### Authentication:
-- Use JWT for authentication. Implement a login endpoint (`POST /auth/login`) to generate a JWT token, which will be required to access the protected routes.
+# Project Structure
 
-#### Authorization:
-- Implement authorization middleware to protect routes that require admin access (e.g., adding, updating, and deleting products).
-- Authorization middleware should check the role from the decoded JWT token and ensure only users with the `admin` role can access these routes.
+```bash
+├── controllers
+│   ├── authController.js
+│   └── productController.js
+├── middleware
+│   ├── adminMiddleware.js
+│   └── authMiddleware.js
+├── models
+│   ├── Product.js
+│   └── User.js
+├── routes
+│   ├── authRoutes.js
+│   └── productRoutes.js
+├── app.js
+├── package.json
+└── README.md
+```
 
-#### Endpoints:
-- **POST /auth/login**: User login (returns a JWT token).
-- **POST /products**: Add a new product (`name`, `category`, `price`, `quantity`). Only accessible to admin.
-- **GET /products**: List all products with pagination (10 products per page).
-- **GET /products/:id**: Get a single product by its ID.
-- **PUT /products/:id**: Update a product. Only accessible to admin.
-- **DELETE /products/:id**: Delete a product. Only accessible to admin.
+---
 
-#### Input Validation (using Express Validator):
-- Use Express Validator for validation on the POST and PUT endpoints.
-- Ensure the following validations:
-  - `name` is required.
-  - `category` is optional but should be a string.
-  - `price` should be a positive number.
-  - `quantity` should be a non-negative integer.
+# Installation
 
-#### Database:
-- Use MongoDB for storing product data with the following schema:
+Clone the repository:
+
+```bash
+git clone https://github.com/AhmedMosad0/junior-backend-test.git
+```
+
+Go to the project folder:
+
+```bash
+cd junior-backend-test
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+---
+
+# Environment Variables
+
+Create a `.env` file in the root directory and add:
+
+```env
+PORT=5000
+
+MONGO_URI=mongodb+srv://ahmedneinaa00_db_user:0kpVdBAgAzQ8c2ms@cluster0.ykjyo6c.mongodb.net/productdb?retryWrites=true&w=majority&appName=Cluster0
+
+JWT_SECRET=mysecretkey
+```
+
+---
+
+# Running The Project
+
+Development mode:
+
+```bash
+npm run dev
+```
+
+Production mode:
+
+```bash
+npm start
+```
+
+---
+
+# Base URL
+
+```txt
+http://localhost:5000
+```
+
+---
+
+# Authentication
+
+## Login
+
+### Request
+
+```http
+POST /auth/login
+```
+
+### Request Body
 
 ```json
 {
-  "name": String,
-  "category": String,
-  "price": Number,
-  "quantity": Number,
-  "createdAt": Date,
-  "updatedAt": Date
+  "username": "admin",
+  "password": "admin123"
 }
 ```
 
-## Features:
-- Implement basic validation for required fields and proper error handling using Express Validator.
-- Ensure security best practices for authentication and authorization.
+### Response
+
+```json
+{
+  "token": eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMGY0ZjMwNjAyNTgyMTBmNmY1MTU1NCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3OTM4ODQyNCwiZXhwIjoxNzc5NDc0ODI0fQ.NoNOQayWtJe9b2pECj_E8MNnpd_v_fwopEE_TlOB7rU
+}
+```
 
 ---
 
-## Challenge 2: Database Query Optimization
+# Products API
 
-### Objective
-Write optimized SQL/NoSQL queries to retrieve product data efficiently.
+## Create Product
 
-Requirements
-SQL Query: (Assuming PostgreSQL)
+### Request
 
-Write a query to fetch products with a price between $50 and $200, ordered by price (ascending), with pagination (10 products per page).
-NoSQL Query: (Assuming MongoDB)
+```http
+POST /products
+```
 
-Write a query to retrieve products by category (e.g., "Electronics"), sorted by price in descending order. Limit the result to 5 products per page.
-Optimization:
+### Headers
 
-How would you optimize the queries for high traffic scenarios (e.g., indexing, caching)?
+```txt
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMGY0ZjMwNjAyNTgyMTBmNmY1MTU1NCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3OTM4ODQyNCwiZXhwIjoxNzc5NDc0ODI0fQ.NoNOQayWtJe9b2pECj_E8MNnpd_v_fwopEE_TlOB7rU
+```
 
+### Request Body
+
+```json
+{
+  "name": "Laptop",
+  "category": "Electronics",
+  "price": 1000,
+  "quantity": 5
+}
+```
 
 ---
 
-## Submission Instructions
+## Get All Products
 
-1. **Clone This Repository**: Fork this repository and set up your environment.
-2. **Complete the Tasks**: Implement the tasks in the respective directories for each challenge.
-3. **Test Your Work**: Ensure your APIs, authentication, authorization, and queries work as expected.
-4. **Submit Your Solution**: Push your completed code to your public GitHub repository and share the link with us.
+### Request
 
+```http
+GET /products
+```
+
+### Pagination Example
+
+```http
+GET /products?page=1
+```
 
 ---
-# 📤 Submission Reminder
 
-You have 2 days.
+## Get Single Product
 
-Fork → Implement → Push → Send GitHub link to:
+### Request
 
-careers@fekracorp.com
+```http
+GET /products/:id
+```
 
-Good luck.
+---
 
+## Update Product
+
+### Request
+
+```http
+PUT /products/:id
+```
+
+### Headers
+
+```txt
+Authorization:
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMGY0ZjMwNjAyNTgyMTBmNmY1MTU1NCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3OTM4ODQyNCwiZXhwIjoxNzc5NDc0ODI0fQ.NoNOQayWtJe9b2pECj_E8MNnpd_v_fwopEE_TlOB7rU
+```
+
+### Request Body
+
+```json
+{
+  "name": "Gaming Laptop",
+  "category": "Electronics",
+  "price": 1500,
+  "quantity": 3
+}
+```
+
+---
+
+## Delete Product
+
+### Request
+
+```http
+DELETE /products/:id
+```
+
+### Headers
+
+```txt
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhMGY0ZjMwNjAyNTgyMTBmNmY1MTU1NCIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc3OTM4ODQyNCwiZXhwIjoxNzc5NDc0ODI0fQ.NoNOQayWtJe9b2pECj_E8MNnpd_v_fwopEE_TlOB7rU
+```
+
+---
+
+# Validation Rules
+
+- `name` is required
+- `category` must be a string
+- `price` must be a positive number
+- `quantity` must be a non-negative integer
+
+---
+
+# SQL Query
+
+```sql
+SELECT *
+FROM products
+WHERE price BETWEEN 50 AND 200
+ORDER BY price ASC
+LIMIT 10 OFFSET 0;
+```
+
+---
+
+# MongoDB Query
+
+```javascript
+Product.find({ category: "Electronics" })
+  .sort({ price: -1 })
+  .limit(5)
+  .skip(0);
+```
+
+---
+
+# Query Optimization
+
+- Add indexes on frequently searched fields
+- Use pagination to limit returned data
+- Cache frequently requested data
+- Avoid unnecessary database queries
+
+---
+
+# Notes
+
+- Protected routes require a valid JWT token.
+- Only users with the `admin` role can create, update, or delete products.
+
+---
+
+# Author
+
+Ahmed Mosad
